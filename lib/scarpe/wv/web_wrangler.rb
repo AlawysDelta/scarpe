@@ -208,6 +208,7 @@ class Scarpe
           pending_evals[this_eval_serial].delete(:timeout_if_not_scheduled)
 
           pending_evals[this_eval_serial][:timeout_if_not_finished] = t_now + timeout
+          @log.debug(wrapped_code)
           @webview.eval(wrapped_code)
           @log.debug("Scheduled JS: (#{this_eval_serial})\n#{wrapped_code}")
         else

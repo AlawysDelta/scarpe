@@ -27,11 +27,51 @@ class Scarpe
     end
 
     def navigate(string)
-      # stub
+      # JS.eval('var empty =
+      # `body {
+      #   font-family: arial, Helvetica, sans-serif;
+      #   margin: 0;
+      #   height: 100%;
+      #   overflow: hidden;
+      # }
+      # p {
+      #   margin: 0;
+      # }`;')
+      # JS.eval("var head = document.head || document.getElementsByTagName('head')[0];")
+      # JS.eval("var style = document.createElement('style');")
+      # JS.eval("head.appendChild(style);")
+      # JS.eval("style.type = 'text/css';")
+      # # JS.eval("style.id = 'style-wvroot';")
+      # JS.eval("head.id = 'head-wvroot';")
+      # JS.eval("head.appendChild(style);")
+      # JS.eval("style.appendChild(document.createTextNode(empty));")
+      # JS.eval("var body = document.body;")
+      # JS.eval("body.id = 'body-wvroot';")
+      # JS.eval("var newDiv = document.createElement('div');")
+      # JS.eval("newDiv.id = 'wrapper-wvroot';")
+      # JS.eval("body.appendChild(newDiv);")
+
+      # style = JS.global[:document].createElement("style")
+      # style[:id] = "style-wvroot"
+      # style.appendChild(JS.global[:document].createTextNode("body {
+      #   font-family: arial, Helvetica, sans-serif;
+      #   margin: 0;
+      #   height: 100%;
+      #   overflow: hidden;
+      # }
+      # p {
+      #   margin: 0;
+      # }"))
+      # JS.global[:document][:head].appendChild(style)
+      # JS.global[:document][:head][:id] = "head-wvroot"
+      # div = JS.global[:document].createElement("div")
+      # div[:id] = "wrapper-wvroot"
+      # JS.global[:document][:body].appendChild(div)
     end
 
     def run
-      # stub
+      JS.eval("return new Promise(() => {})").await
+      JS.global[:document].write("haha")
     end
 
     def destroy

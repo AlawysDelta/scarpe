@@ -2,6 +2,7 @@
 
 # require "logging"
 require "json"
+require "js"
 
 class Scarpe
   LOG_LEVELS = [:debug, :info, :warning, :error, :fatal].freeze
@@ -17,15 +18,19 @@ class Scarpe
     }
     class LogStub
       def error(string)
+        JS.global[:document].write("error: #{string}<br>")
       end
 
       def warn(string)
+        JS.global[:document].write("warn: #{string}<br>")
       end
 
       def debug(string)
+        JS.global[:document].write("debug: #{string}<br>")
       end
 
       def info(string)
+        JS.global[:document].write("info: #{string}<br>")
       end
     end
 
