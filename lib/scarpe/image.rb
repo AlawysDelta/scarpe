@@ -1,33 +1,34 @@
 # frozen_string_literal: true
+# # frozen_string_literal: true
 
-require "fastimage"
-require "open-uri"
+# require "fastimage"
+# require "open-uri"
 
-class Scarpe
-  class Image < Scarpe::Widget
-    display_properties :url, :width, :height, :top, :left, :click
+# class Scarpe
+#   class Image < Scarpe::Widget
+#     display_properties :url, :width, :height, :top, :left, :click
 
-    def initialize(url, width: nil, height: nil, top: nil, left: nil, click: nil)
-      @url = url
+#     def initialize(url, width: nil, height: nil, top: nil, left: nil, click: nil)
+#       @url = url
 
-      super
+#       super
 
-      # Get the image dimensions
-      # @width, @height = size
+#       # Get the image dimensions
+#       # @width, @height = size
 
-      create_display_widget
-    end
+#       create_display_widget
+#     end
 
-    def replace(url)
-      self.url = url
-    end
-  end
+#     def replace(url)
+#       self.url = url
+#     end
+#   end
 
-  class Widget
-    def size
-      width, height = FastImage.size(@url)
+#   class Widget
+#     def size
+#       width, height = FastImage.size(@url)
 
-      [width, height]
-    end
-  end
-end
+#       [width, height]
+#     end
+#   end
+# end

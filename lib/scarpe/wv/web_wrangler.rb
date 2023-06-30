@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "webview_ruby"
+# require "webview_ruby"
 require "cgi"
 
 # WebWrangler operates in multiple phases: setup and running.
@@ -49,8 +49,8 @@ class Scarpe
       @log.debug("Creating WebWrangler...")
 
       # For now, always allow inspect element
-      @webview = WebviewRuby::Webview.new debug: true
-      @webview = Scarpe::LoggedWrapper.new(@webview, "WebviewAPI") if debug
+      @webview = Scarpe::WASMInterops.new
+      #@webview = Scarpe::LoggedWrapper.new(@webview, "WebviewAPI") if debug
       @init_refs = {} # Inits don't go away so keep a reference to them to prevent GC
 
       @title = title
@@ -81,7 +81,7 @@ class Scarpe
       # Ruby receives scarpeHeartbeat messages via the window library's main loop.
       # So this is a way for Ruby to be notified periodically, in time with that loop.
       @webview.bind("scarpeHeartbeat") do
-        return unless @webview # I think GTK+ may continue to deliver events after shutdown
+        #  return unless @webview # I think GTK+ may continue to deliver events after shutdown
 
         periodic_js_callback
         @heartbeat_handlers.each(&:call)
@@ -346,7 +346,7 @@ class Scarpe
     def monkey_patch_console(window)
       # this forwards all console.log/info/error/warn calls also
       # to the terminal that is running the scarpe app
-      window.eval <<~JS
+      window.eval("
         function patchConsole(fn) {
           const original = console[fn];
           console[fn] = function(...args) {
@@ -358,7 +358,7 @@ class Scarpe
         patchConsole('info');
         patchConsole('error');
         patchConsole('warn');
-      JS
+      ")
     end
 
     def empty

@@ -57,10 +57,10 @@ module Scarpe::Test::LoggedTest
     # Delete stale test failures and logging only the *first* time this is called.
     set_up_test_failures
 
-    @normal_log_config = Scarpe::Logger.current_log_config
-    Scarpe::Logger.configure_logger(log_config_for_test)
+    # @normal_log_config = Scarpe::Logger.current_log_config
+    # Scarpe::Logger.configure_logger(log_config_for_test)
 
-    Scarpe::Logger.logger("LoggedScarpeTest").info("Test: #{self.class.name}##{self.name}")
+    # Scarpe::Logger.logger("LoggedScarpeTest").info("Test: #{self.class.name}##{self.name}")
   end
 
   # If you include this module and don't override setup/teardown, everything will

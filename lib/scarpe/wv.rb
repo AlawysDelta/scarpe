@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Scarpe Webview Display Services
-
+require_relative "wv/wasm"
 require_relative "wv/web_wrangler"
 require_relative "wv/control_interface"
 

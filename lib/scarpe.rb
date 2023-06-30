@@ -14,6 +14,9 @@ require "json"
 
 require_relative "constants"
 
+class Scarpe
+end
+
 class Scarpe::Error < StandardError; end
 
 require_relative "scarpe/version"
