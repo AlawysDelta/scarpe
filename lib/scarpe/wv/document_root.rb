@@ -34,6 +34,7 @@ class Scarpe
     def request_redraw!
       wrangler = WebviewDisplayService.instance.wrangler
       if wrangler.is_running
+        # puts "Replace is being called"
         wrangler.replace(self.to_html)
       end
     end

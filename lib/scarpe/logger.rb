@@ -18,19 +18,19 @@ class Scarpe
     }
     class LogStub
       def error(string)
-        JS.global[:document].write("error: #{string}<br>")
+        # puts("error: #{string}")
       end
 
       def warn(string)
-        JS.global[:document].write("warn: #{string}<br>")
+        # puts("warn: #{string}")
       end
 
       def debug(string)
-        JS.global[:document].write("debug: #{string}<br>")
+        # puts("debug: #{string}")
       end
 
       def info(string)
-        JS.global[:document].write("info: #{string}<br>")
+        # puts("info: #{string}")
       end
     end
 

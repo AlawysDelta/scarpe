@@ -91,7 +91,7 @@ class Scarpe
     def add_child(child)
       @children ||= []
       @children << child
-
+      @log.debug(child)
       # If we add a child, we should redraw ourselves
       needs_update!
     end

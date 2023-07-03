@@ -325,9 +325,6 @@ class Scarpe
 
       @is_running = true
       @webview.run
-      @is_running = false
-      @webview.destroy
-      @webview = nil
     end
 
     def destroy

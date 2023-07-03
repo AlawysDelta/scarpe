@@ -14,7 +14,8 @@ class Scarpe
     end
 
     def init(command)
-      JS.eval(command)
+      @commands ||= []
+      @commands << command
     end
 
     def set_title(title)
@@ -70,8 +71,8 @@ class Scarpe
     end
 
     def run
-      JS.eval("return new Promise(() => {})").await
-      JS.global[:document].write("haha")
+      @commands.each {|command| JS.eval(command)}
+      puts "HAHA"
     end
 
     def destroy
