@@ -176,7 +176,6 @@ class Scarpe
       bad_opts = opts.keys - EVAL_OPTS
       raise("Bad options given to eval_with_handler! #{bad_opts.inspect}") unless bad_opts.empty?
 
-      @log.debug("Starting async eval of scheduled changes")
       unless @is_running
         raise "WebWrangler isn't running, so evaluating JS won't work!"
       end
@@ -196,7 +195,6 @@ class Scarpe
       timeout = opts[:timeout] || EVAL_DEFAULT_TIMEOUT
 
       promise = Scarpe::Promise.new(parents: (opts[:wait_for] || [])) do
-        @log.debug("Creating Promise for serial #{this_eval_serial}")
         # Are we mid-shutdown?
         if @webview
           wrapped_code = WebWrangler.js_wrapped_code(code, this_eval_serial)
@@ -244,7 +242,6 @@ class Scarpe
 
     def receive_eval_result(r_type, id, val)
       entry = @pending_evals.delete(id)
-      @log.debug(entry)
       unless entry
         raise "Received an eval result for a nonexistent ID #{id.inspect}!"
       end

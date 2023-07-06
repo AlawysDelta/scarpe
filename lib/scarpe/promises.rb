@@ -28,7 +28,7 @@ class Scarpe
   class Promise
     include Scarpe::Log
 
-    PROMISE_STATES = [:unscheduled, :pending, :fulfilled, :rejected, :initialized]
+    PROMISE_STATES = [:unscheduled, :pending, :fulfilled, :rejected]
 
     attr_reader :state
     attr_reader :parents
@@ -79,7 +79,6 @@ class Scarpe
 
       # These are as initially specified, and effectively immutable
       @state = state
-      @log.debug("Promise state: #{@state}")
       @parents = parents
 
       # These are what we're waiting on, and will be
@@ -116,7 +115,7 @@ class Scarpe
 
         if @waiting_on.empty?
           # No further dependencies, we can schedule ourselves
-          @state = :initialized
+          @state = :unscheduled
 
           # We have no on_scheduled handlers yet, but this will
           # call and clear the scheduler.
@@ -333,8 +332,11 @@ class Scarpe
     public
 
     def await
-      set_state(:pending)
-      call_handlers_for(:pending)
+      if @state == :unscheduled
+        set_state(:pending)
+        call_handlers_for(:pending)
+      elsif raise "Can't await on a promise that's not unscheduled"
+      end
     end
 
     def on_fulfilled(&handler)

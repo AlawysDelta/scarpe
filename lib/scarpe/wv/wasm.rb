@@ -48,9 +48,7 @@ class Scarpe
     end
 
     def eval(command)
-      @log.debug("Starting evaluation of #{command}")
       JS.eval(command)
-      @log.debug("Evaluation ended")
     end
 
     def init(command)
