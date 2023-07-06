@@ -37,7 +37,7 @@ class Scarpe
       app = Scarpe::App.new(...)
       app.init
       app.run
-      app.destroy
+      #app.destroy
     end
   end
 end

@@ -18,23 +18,44 @@ class Scarpe
     }
     class LogStub
       def error(string)
-        # puts("error: #{string}")
+        div = JS.global[:document].getElementById("logs")
+        content = JS.global[:document].createTextNode("error: #{string}\n")
+        br = JS.global[:document].createElement("br")
+        div.appendChild(content)
+        div.appendChild(br)
       end
 
       def warn(string)
-        # puts("warn: #{string}")
+        div = JS.global[:document].getElementById("logs")
+        content = JS.global[:document].createTextNode("warn: #{string}\n")
+        br = JS.global[:document].createElement("br")
+        div.appendChild(content)
+        div.appendChild(br)
       end
 
       def debug(string)
-        # puts("debug: #{string}")
+        div = JS.global[:document].getElementById("logs")
+        content = JS.global[:document].createTextNode("debug: #{string}\n")
+        br = JS.global[:document].createElement("br")
+        div.appendChild(content)
+        div.appendChild(br)
       end
 
       def info(string)
-        # puts("info: #{string}")
+        div = JS.global[:document].getElementById("logs")
+        content = JS.global[:document].createTextNode("info: #{string}\n")
+        br = JS.global[:document].createElement("br")
+        div.appendChild(content)
+        div.appendChild(br)
       end
     end
 
     def log_init(component = self)
+      div = JS.global[:document].createElement("div")
+      div[:id] = "logs"
+      div[:hidden] = 1
+      next_div = JS.global[:document].getElementById("wrapper-wvroot")
+      JS.global[:document][:body].insertBefore(div, next_div)
       @log = Scarpe::Log::LogStub.new
     end
 

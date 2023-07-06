@@ -41,7 +41,7 @@ class Scarpe
     EVAL_RESULT = "scarpeAsyncEvalResult"
 
     # Allow a half-second for Webview to finish our JS eval before we decide it's not going to
-    EVAL_DEFAULT_TIMEOUT = 0.5
+    EVAL_DEFAULT_TIMEOUT = 1.5
 
     def initialize(title:, width:, height:, resizable: false, debug: false, heartbeat: 0.1)
       log_init("WV::WebWrangler")
@@ -176,6 +176,7 @@ class Scarpe
       bad_opts = opts.keys - EVAL_OPTS
       raise("Bad options given to eval_with_handler! #{bad_opts.inspect}") unless bad_opts.empty?
 
+      @log.debug("Starting async eval of scheduled changes")
       unless @is_running
         raise "WebWrangler isn't running, so evaluating JS won't work!"
       end
@@ -195,6 +196,7 @@ class Scarpe
       timeout = opts[:timeout] || EVAL_DEFAULT_TIMEOUT
 
       promise = Scarpe::Promise.new(parents: (opts[:wait_for] || [])) do
+        @log.debug("Creating Promise for serial #{this_eval_serial}")
         # Are we mid-shutdown?
         if @webview
           wrapped_code = WebWrangler.js_wrapped_code(code, this_eval_serial)
@@ -208,7 +210,6 @@ class Scarpe
           pending_evals[this_eval_serial].delete(:timeout_if_not_scheduled)
 
           pending_evals[this_eval_serial][:timeout_if_not_finished] = t_now + timeout
-          @log.debug(wrapped_code)
           @webview.eval(wrapped_code)
           @log.debug("Scheduled JS: (#{this_eval_serial})\n#{wrapped_code}")
         else
@@ -217,7 +218,7 @@ class Scarpe
       end
 
       @pending_evals[this_eval_serial][:promise] = promise
-
+      @pending_evals[this_eval_serial][:promise].await
       promise
     end
 
@@ -243,6 +244,7 @@ class Scarpe
 
     def receive_eval_result(r_type, id, val)
       entry = @pending_evals.delete(id)
+      @log.debug(entry)
       unless entry
         raise "Received an eval result for a nonexistent ID #{id.inspect}!"
       end
@@ -344,19 +346,19 @@ class Scarpe
     def monkey_patch_console(window)
       # this forwards all console.log/info/error/warn calls also
       # to the terminal that is running the scarpe app
-      window.eval("
-        function patchConsole(fn) {
-          const original = console[fn];
-          console[fn] = function(...args) {
-            original(...args);
-            puts(...args);
-          }
-        };
-        patchConsole('log');
-        patchConsole('info');
-        patchConsole('error');
-        patchConsole('warn');
-      ")
+      # window.eval("
+      #   function patchConsole(fn) {
+      #     const original = console[fn];
+      #     console[fn] = function(...args) {
+      #       original(...args);
+      #       puts(...args);
+      #     }
+      #   };
+      #   patchConsole('log');
+      #   patchConsole('info');
+      #   patchConsole('error');
+      #   patchConsole('warn');
+      # ")
     end
 
     def empty
