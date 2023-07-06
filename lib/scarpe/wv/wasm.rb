@@ -96,7 +96,6 @@ class Scarpe
         font-family: arial, Helvetica, sans-serif;
         margin: 0;
         height: 100%;
-        overflow: hidden;
       }
       p {
         margin: 0;
@@ -112,7 +111,7 @@ class Scarpe
       @commands.each { |command| JS.eval(command) }
     end
 
-    def destroy
+    def terminate
       # stub
     end
   end
