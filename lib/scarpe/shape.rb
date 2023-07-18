@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "wv/shape_helper"
+require_relative "wasm/shape_helper"
 class Scarpe
   class Shape < Scarpe::Widget
     include ShapeHelper

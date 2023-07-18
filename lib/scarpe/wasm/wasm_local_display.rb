@@ -6,7 +6,7 @@ class Scarpe
   # process, too many or too large evals can crash the process, etc.
   # Normally the intention is to use a RelayDisplayService to a second
   # process containing one of these.
-  class WebviewDisplayService < Scarpe::DisplayService
+  class WASMDisplayService < Scarpe::DisplayService
     include Scarpe::Log
 
     class << self
@@ -18,16 +18,16 @@ class Scarpe
     attr_reader :doc_root
     attr_reader :wrangler
 
-    # This is called before any of the various WebviewWidgets are created.
+    # This is called before any of the various WASMWidgets are created.
     def initialize
-      if WebviewDisplayService.instance
+      if WASMDisplayService.instance
         raise "ERROR! This is meant to be a singleton!"
       end
 
-      WebviewDisplayService.instance = self
+      WASMDisplayService.instance = self
 
       super()
-      log_init("WV::WebviewDisplayService")
+      log_init("WV::WASMDisplayService")
 
       @display_widget_for = {}
     end
@@ -35,10 +35,10 @@ class Scarpe
     def create_display_widget_for(widget_class_name, widget_id, properties)
       if widget_class_name == "App"
         unless @doc_root
-          raise "WebviewDocumentRoot is supposed to be created before WebviewApp!"
+          raise "WASMDocumentRoot is supposed to be created before WASMApp!"
         end
 
-        display_app = Scarpe::WebviewApp.new(properties)
+        display_app = Scarpe::WASMApp.new(properties)
         display_app.document_root = @doc_root
         @control_interface = display_app.control_interface
         @control_interface.doc_root = @doc_root
@@ -51,13 +51,13 @@ class Scarpe
       end
 
       # Create a corresponding display widget
-      display_class = Scarpe::WebviewWidget.display_class_for(widget_class_name)
+      display_class = Scarpe::WASMWidget.display_class_for(widget_class_name)
       display_widget = display_class.new(properties)
       set_widget_pairing(widget_id, display_widget)
 
       if widget_class_name == "DocumentRoot"
-        # WebviewDocumentRoot is created before WebviewApp. Mostly doc_root is just like any other widget,
-        # but we'll want a reference to it when we create WebviewApp.
+        # WASMDocumentRoot is created before WASMApp. Mostly doc_root is just like any other widget,
+        # but we'll want a reference to it when we create WASMApp.
         @doc_root = display_widget
       end
 
@@ -66,7 +66,7 @@ class Scarpe
 
     def destroy
       @app.destroy
-      WebviewDisplayService.instance = nil
+      WASMDisplayService.instance = nil
     end
   end
 end

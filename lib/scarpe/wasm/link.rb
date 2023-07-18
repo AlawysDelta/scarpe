@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Scarpe
-  class WebviewLink < WebviewWidget
+  class WASMLink < WASMWidget
     def initialize(properties)
       super
 

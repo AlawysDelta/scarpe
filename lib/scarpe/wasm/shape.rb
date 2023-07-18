@@ -3,7 +3,7 @@
 require_relative "shape_helper"
 
 class Scarpe
-  class WebviewShape < Scarpe::WebviewWidget
+  class WASMShape < Scarpe::WASMWidget
     include ShapeHelper
 
     def initialize(properties)

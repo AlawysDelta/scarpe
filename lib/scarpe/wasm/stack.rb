@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class Scarpe
-  class WebviewFlow < Scarpe::WebviewWidget
-    include Scarpe::WebviewBackground
-    include Scarpe::WebviewBorder
+  class WASMStack < Scarpe::WASMWidget
+    include Scarpe::WASMBackground
+    include Scarpe::WASMBorder
+    include Scarpe::WASMSpacing
 
     def initialize(properties)
       super
@@ -11,8 +12,12 @@ class Scarpe
 
     def element(&block)
       HTML.render do |h|
-        h.div(id: html_id, style:, &block)
+        h.div(id: html_id, style: style, &block)
       end
+    end
+
+    def get_style
+      style
     end
 
     private
@@ -21,10 +26,10 @@ class Scarpe
       styles = super
 
       styles[:display] = "flex"
-      styles["flex-direction"] = "row"
-      styles["flex-wrap"] = "wrap"
+      styles["flex-direction"] = "column"
       styles[:width] = Dimensions.length(@width) if @width
       styles[:height] = Dimensions.length(@height) if @height
+      styles["overflow"] = "auto" if @scroll
 
       styles
     end

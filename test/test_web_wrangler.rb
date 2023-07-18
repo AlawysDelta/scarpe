@@ -24,7 +24,7 @@ class TestWebWranglerInScarpeApp < LoggedScarpeTest
       end
     SCARPE_APP
       on_event(:next_redraw) do
-        para = find_wv_widgets(Scarpe::WebviewPara)[0]
+        para = find_wasm_widgets(Scarpe::WebviewPara)[0]
         with_js_dom_html do |html_text|
           assert html_text.include?("Hello"), "DOM HTML should include initial para text!"
         end.then_ruby_promise do
@@ -59,7 +59,7 @@ class TestWebWranglerInScarpeApp < LoggedScarpeTest
       end
     SCARPE_APP
       on_event(:next_redraw) do
-        button = find_wv_widgets(Scarpe::WebviewButton)[0]
+        button = find_wasm_widgets(Scarpe::WebviewButton)[0]
         snippet = button.handler_js_code("click")
         with_js_value(snippet) do
           # We clicked the button, which should (in local-Webview) mean the Shoes-side
@@ -119,7 +119,7 @@ class TestWebWranglerMocked < LoggedScarpeTest
       class << @mocked_webview
         define_method(:run) do
           block = CHEAT_CONSTS[:w_r_m_v][:block]
-          webview = CHEAT_CONSTS[:w_r_m_v][:mwv]
+          webview = CHEAT_CONSTS[:w_r_m_v][:vmw]
           block.call
           webview.expect :destroy, nil
         end

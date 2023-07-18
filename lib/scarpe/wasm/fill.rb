@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Scarpe
-  class WebviewFill < WebviewWidget
+  class WASMFill < WASMWidget
     def initialize(properties)
       super(properties)
     end

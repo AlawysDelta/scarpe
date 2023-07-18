@@ -24,7 +24,7 @@ require_relative "scarpe/promises"
 require_relative "scarpe/display_service"
 require_relative "scarpe/widgets"
 
-d_s = ENV["SCARPE_DISPLAY_SERVICE"] || "wv_local"
+d_s = ENV["SCARPE_DISPLAY_SERVICE"] || "wasm_local"
 # This is require, not require_relative, to allow gems to supply a new display service
 require "scarpe/#{d_s}"
 

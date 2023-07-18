@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
 class Scarpe
-  class WebviewWidget < DisplayService::Linkable
+  class WASMWidget < DisplayService::Linkable
     include Scarpe::Log
 
     class << self
       def display_class_for(scarpe_class_name)
         scarpe_class = Scarpe.const_get(scarpe_class_name)
         unless scarpe_class.ancestors.include?(Scarpe::DisplayService::Linkable)
-          raise "Scarpe Webview can only get display classes for Scarpe " +
+          raise "Scarpe WASM can only get display classes for Scarpe " +
             "linkable widgets, not #{scarpe_class_name.inspect}!"
         end
 
-        klass = Scarpe.const_get("Webview" + scarpe_class_name.split("::")[-1])
+        klass = Scarpe.const_get("WASM" + scarpe_class_name.split("::")[-1])
         if klass.nil?
-          raise "Couldn't find corresponding Scarpe Webview class for #{scarpe_class_name.inspect}!"
+          raise "Couldn't find corresponding Scarpe WASM class for #{scarpe_class_name.inspect}!"
         end
 
         klass
@@ -43,7 +43,7 @@ class Scarpe
 
       # The parent field is *almost* simple enough that a typed display property would handle it.
       bind_shoes_event(event_name: "parent", target: shoes_linkable_id) do |new_parent_id|
-        display_parent = WebviewDisplayService.instance.query_display_widget_for(new_parent_id)
+        display_parent = WASMDisplayService.instance.query_display_widget_for(new_parent_id)
         if @parent != display_parent
           set_parent(display_parent)
         end
@@ -126,7 +126,7 @@ class Scarpe
 
     # This gets a mini-webview for just this element and its children, if any
     def html_element
-      @elt_wrangler ||= WebviewDisplayService.instance.doc_root.get_element_wrangler(html_id)
+      @elt_wrangler ||= WASMDisplayService.instance.doc_root.get_element_wrangler(html_id)
     end
 
     # Return a promise that guarantees all currently-requested changes have completed
@@ -154,7 +154,7 @@ class Scarpe
     def bind(event, &block)
       raise("Widget has no linkable_id! #{inspect}") unless linkable_id
 
-      WebviewDisplayService.instance.doc_root.bind("#{linkable_id}-#{event}", &block)
+      WASMDisplayService.instance.doc_root.bind("#{linkable_id}-#{event}", &block)
     end
 
     # Removes the element from both the Ruby Widget tree and the HTML DOM.
@@ -168,7 +168,7 @@ class Scarpe
     # And so we can't easily cancel one "in flight," and we can't easily pick up the latest
     # changes... And we probably don't want to, because we may be halfway through a batch.
     def needs_update!
-      WebviewDisplayService.instance.doc_root.request_redraw!
+      WASMDisplayService.instance.doc_root.request_redraw!
     end
 
     def handler_js_code(handler_function_name, *args)

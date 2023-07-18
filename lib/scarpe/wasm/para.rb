@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class Scarpe
-  class WebviewSpan < Scarpe::WebviewWidget
+  class WASMPara < WASMWidget
     SIZES = {
       inscription: 10,
       ins: 10,
-      span: 12,
+      para: 12,
       caption: 14,
       tagline: 18,
       subtitle: 26,
@@ -16,12 +16,15 @@ class Scarpe
 
     def initialize(properties)
       super
+      @log.debug("Para init")
     end
 
     def properties_changed(changes)
-      text = changes.delete("text")
-      if text
-        html_element.inner_html = text
+      @log.debug("Starting properties_Changed")
+      items = changes.delete("text_items")
+      if items
+        html_element.inner_html = to_html
+        @log.debug("re-rendering")
         return
       end
 
@@ -33,17 +36,42 @@ class Scarpe
       super
     end
 
+    def items_to_display_children(items)
+      return [] if items.nil?
+
+      items.map do |item|
+        if item.is_a?(String)
+          item
+        else
+          WASMDisplayService.instance.query_display_widget_for(item)
+        end
+      end
+    end
+
     def element(&block)
       HTML.render do |h|
-        h.span(**options, &block)
+        h.p(**options, &block)
       end
     end
 
     def to_html
-      element { @text }
+      @log.debug("to_html")
+      @children ||= []
+
+      element { child_markup }
     end
 
     private
+
+    def child_markup
+      items_to_display_children(@text_items).map do |child|
+        if child.respond_to?(:to_html)
+          child.to_html
+        else
+          child.gsub("\n", "<br>")
+        end
+      end.join
+    end
 
     def options
       @html_attributes.merge(id: html_id, style: style)
@@ -51,7 +79,7 @@ class Scarpe
 
     def style
       {
-        "color" => @stroke,
+        "color" => rgb_to_hex(@stroke),
         "font-size" => font_size,
         "font-family" => @font,
       }.compact

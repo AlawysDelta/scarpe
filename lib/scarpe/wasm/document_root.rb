@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Scarpe
-  class WebviewDocumentRoot < Scarpe::WebviewWidget
-    include Scarpe::WebviewBackground
+  class WASMDocumentRoot < Scarpe::WASMWidget
+    include Scarpe::WASMBackground
 
     def initialize(properties)
       @callbacks = {}
@@ -32,14 +32,14 @@ class Scarpe
     # very rare if nothing is changing, with seconds or minutes passing in between them.
 
     def request_redraw!
-      wrangler = WebviewDisplayService.instance.wrangler
+      wrangler = WASMDisplayService.instance.wrangler
       if wrangler.is_running
         # puts "Replace is being called"
         wrangler.replace(self.to_html)
       end
     end
 
-    # The document root manages the connection between widgets and the WebviewWrangler.
+    # The document root manages the connection between widgets and the WASMWrangler.
     # By centralising this and wrapping in API functions, we can keep from executing
     # random Javascript, mostly.
 

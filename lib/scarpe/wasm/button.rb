@@ -1,19 +1,21 @@
 # frozen_string_literal: true
 
 class Scarpe
-  class WebviewImage < WebviewWidget
+  class WASMButton < WASMWidget
     def initialize(properties)
       super
+
+      # Bind to display-side handler for "click"
+      bind("click") do
+        # This will be sent to the bind_self_event in Button
+        send_self_event(event_name: "click")
+      end
     end
 
     def element
-      if @click
-        HTML.render do |h|
-          h.a(id: html_id, href: @click) { h.img(id: html_id, src: @url, style:) }
-        end
-      else
-        HTML.render do |h|
-          h.img(id: html_id, src: @url, style:)
+      HTML.render do |h|
+        h.button(id: html_id, onclick: handler_js_code("click"), style: style) do
+          @text
         end
       end
     end

@@ -54,7 +54,7 @@ class Scarpe
 
     # Need to be able to query widgets in test code
 
-    def all_wv_widgets
+    def all_wasm_widgets
       known = [doc_root]
       to_check = [doc_root]
 
@@ -71,8 +71,8 @@ class Scarpe
     # Shoes doesn't name widgets. We aren't guaranteed that the Shoes widgets are even in the same
     # process, since we have the Relay display service for Webview. So mostly we can look by
     # display service class.
-    def find_wv_widgets(*specifiers)
-      widgets = all_wv_widgets
+    def find_wasm_widgets(*specifiers)
+      widgets = all_wasm_widgets
 
       specifiers.each do |spec|
         if spec.is_a?(Class)
@@ -192,7 +192,7 @@ class Scarpe
     end
 
     def with_js_dom_html(wait_for: [], timeout: DEFAULT_ASSERTION_TIMEOUT, &block)
-      with_js_value("document.getElementById('wrapper-wvroot').innerHTML", wait_for: wait_for, timeout: timeout, &block)
+      with_js_value("document.getElementById('wrapper-wasmroot').innerHTML", wait_for: wait_for, timeout: timeout, &block)
     end
 
     def fully_updated(wait_for: [])

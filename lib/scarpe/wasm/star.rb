@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Scarpe
-  class WebviewStar < Scarpe::WebviewWidget
+  class WASMStar < Scarpe::WASMWidget
     def initialize(properties)
       super(properties)
     end

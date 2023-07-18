@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Scarpe
-  # Scarpe::WebviewApp must only be used from the main thread, due to GTK+ limitations.
-  class WebviewApp < WebviewWidget
+  # Scarpe::WASMApp must only be used from the main thread, due to GTK+ limitations.
+  class WASMApp < WASMWidget
     attr_reader :debug
     attr_reader :control_interface
 

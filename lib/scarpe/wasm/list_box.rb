@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Scarpe
-  class WebviewListBox < Scarpe::WebviewWidget
+  class WASMListBox < Scarpe::WASMWidget
     attr_reader :selected_item, :items, :height, :width
 
     def initialize(properties)

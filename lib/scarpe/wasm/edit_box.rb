@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Scarpe
-  class WebviewEditBox < Scarpe::WebviewWidget
+  class WASMEditBox < Scarpe::WASMWidget
     attr_reader :text, :height, :width
 
     def initialize(properties)

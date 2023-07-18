@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Scarpe
-  class WebviewEditLine < WebviewWidget
+  class WASMEditLine < WASMWidget
     attr_reader :text, :width
 
     def initialize(properties)

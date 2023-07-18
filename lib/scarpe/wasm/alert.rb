@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Scarpe
-  class WebviewAlert < WebviewWidget
+  class WASMAlert < WASMWidget
     def initialize(properties)
       super
 
