@@ -22,7 +22,7 @@ class Scarpe
 
     # The control interface needs to see major system components to hook into their events
     def initialize
-      log_init("WV::ControlInterface")
+      log_init("WASM::ControlInterface")
 
       @do_shutdown = false
       @event_handlers = {}

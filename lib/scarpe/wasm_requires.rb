@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 # Scarpe WASM Display Services
-require_relative "wasm/wasm"
+require_relative "wasm/wasm_calls"
 require_relative "wasm/web_wrangler"
 require_relative "wasm/control_interface"
 
 require_relative "wasm/widget"
 require_relative "wasm/wasm_local_display"
-require_relative "wasm/webview_relay_display"
 
 require_relative "wasm/dimensions"
 require_relative "wasm/html"

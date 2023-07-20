@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# require "wasm_ruby"
 require "cgi"
 
 # WebWrangler operates in multiple phases: setup and running.
@@ -44,7 +43,7 @@ class Scarpe
     EVAL_DEFAULT_TIMEOUT = 1.5
 
     def initialize(title:, width:, height:, resizable: false, debug: false, heartbeat: 0.1)
-      log_init("WV::WebWrangler")
+      log_init("WASM::WebWrangler")
 
       @log.debug("Creating WebWrangler...")
 
@@ -451,7 +450,7 @@ class Scarpe
       # attr_reader :waiting_redraw_promise
 
       def initialize(web_wrangler, debug: false)
-        log_init("WV::WebWrangler::DOMWrangler")
+        log_init("WASM::WebWrangler::DOMWrangler")
 
         @wrangler = web_wrangler
 
@@ -484,6 +483,7 @@ class Scarpe
       end
 
       def request_change(js_code)
+        @log.debug("Requesting change with code #{js_code}")
         # No updates until there's something to update
         return unless @first_draw_requested
 
@@ -497,6 +497,7 @@ class Scarpe
       end
 
       def request_replace(html_text)
+        @log.debug("Entering request_replace")
         # Replace other pending changes, they're not needed any more
         @waiting_changes = [DOMWrangler.replacement_code(html_text)]
         @first_draw_requested = true
@@ -635,7 +636,7 @@ class Scarpe
         # return if @waiting_changes.empty?
 
         js_code = @waiting_changes.join(";")
-        # @waiting_changes = [] # They're not waiting any more!
+        @waiting_changes = [] # They're not waiting any more!
         @wrangler.eval_js_async(js_code)
       end
     end

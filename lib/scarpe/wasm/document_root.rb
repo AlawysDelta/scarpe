@@ -39,7 +39,7 @@ class Scarpe
       end
     end
 
-    # The document root manages the connection between widgets and the WASMWrangler.
+    # The document root manages the connection between widgets and the WebviewWrangler.
     # By centralising this and wrapping in API functions, we can keep from executing
     # random Javascript, mostly.
 

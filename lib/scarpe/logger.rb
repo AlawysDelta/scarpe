@@ -16,7 +16,7 @@ class Scarpe
     DEFAULT_DEBUG_LOG_CONFIG = {
       "default" => "debug",
     }
-    class LogWASM
+    class LogStub
       def error(string)
         # div = JS.global[:document].getElementById("logs")
         # content = JS.global[:document].createTextNode("error: #{string}\n")
@@ -27,20 +27,43 @@ class Scarpe
       end
 
       def warn(string)
+        # div = JS.global[:document].getElementById("logs")
+        # content = JS.global[:document].createTextNode("warn: #{string}\n")
+        # br = JS.global[:document].createElement("br")
+        # div.appendChild(content)
+        # div.appendChild(br)
         puts "warn: #{string}\n"
       end
 
       def debug(string)
+        # div = JS.global[:document].getElementById("logs")
+        # content = JS.global[:document].createTextNode("debug: #{string}\n")
+        # br = JS.global[:document].createElement("br")
+        # div.appendChild(content)
+        # div.appendChild(br)
         puts "debug: #{string}\n"
       end
 
       def info(string)
+        # div = JS.global[:document].getElementById("logs")
+        # content = JS.global[:document].createTextNode("info: #{string}\n")
+        # br = JS.global[:document].createElement("br")
+        # div.appendChild(content)
+        # div.appendChild(br)
         puts "info: #{string}\n"
       end
     end
 
     def log_init(component = self)
-      @log = Scarpe::Log::LogWASM.new
+      # div = JS.global[:document].createElement("div")
+      # div[:id] = "logs"
+      # div[:hidden] = 1
+      # next_div = JS.global[:document].getElementById("wrapper-wvroot")
+      # logs = JS.global[:document].getElementById("logs")
+      # if logs.inspect == "null"
+      #   JS.global[:document][:body].insertBefore(div, next_div)
+      # end
+      @log = Scarpe::Log::LogStub.new
     end
 
     class Logger

@@ -26,7 +26,7 @@ class Scarpe
     attr_reader :children
 
     def initialize(properties)
-      log_init("WV::Widget")
+      log_init("WASM::Widget")
 
       # Call method, which looks up the parent
       @shoes_linkable_id = properties["shoes_linkable_id"] || properties[:shoes_linkable_id]

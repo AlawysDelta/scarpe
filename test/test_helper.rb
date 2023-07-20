@@ -42,12 +42,12 @@ class ScarpeWebviewTest < Minitest::Test
     timeout: 2.5,
     allow_fail: false,
     exit_immediately: false,
-    display_service: "wasm_local"
+    display_service: "wv_local"
   )
 
     with_tempfile("scarpe_test_results.json", "") do |result_path|
       scarpe_test_code = <<~SCARPE_TEST_CODE
-        require "scarpe/wasm/control_interface_test"
+        require "scarpe/wv/control_interface_test"
 
         on_event(:init) do
           die_after #{timeout}

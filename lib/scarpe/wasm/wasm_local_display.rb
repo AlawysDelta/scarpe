@@ -18,7 +18,7 @@ class Scarpe
     attr_reader :doc_root
     attr_reader :wrangler
 
-    # This is called before any of the various WASMWidgets are created.
+    # This is called before any of the various WebviewWidgets are created.
     def initialize
       if WASMDisplayService.instance
         raise "ERROR! This is meant to be a singleton!"
@@ -27,7 +27,7 @@ class Scarpe
       WASMDisplayService.instance = self
 
       super()
-      log_init("WV::WASMDisplayService")
+      log_init("WASM::WASMDisplayService")
 
       @display_widget_for = {}
     end
@@ -56,8 +56,8 @@ class Scarpe
       set_widget_pairing(widget_id, display_widget)
 
       if widget_class_name == "DocumentRoot"
-        # WASMDocumentRoot is created before WASMApp. Mostly doc_root is just like any other widget,
-        # but we'll want a reference to it when we create WASMApp.
+        # WebviewDocumentRoot is created before WebviewApp. Mostly doc_root is just like any other widget,
+        # but we'll want a reference to it when we create WebviewApp.
         @doc_root = display_widget
       end
 
