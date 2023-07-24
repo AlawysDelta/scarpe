@@ -7,7 +7,6 @@ class Scarpe
 
     def initialize(properties)
       log_init("ScarpeEditBox")
-      @log.debug("Initializing edit box")
       super
 
       # The JS handler sends a "change" event, which we forward to the Shoes widget tree
@@ -17,7 +16,6 @@ class Scarpe
     end
 
     def properties_changed(changes)
-      @log.debug("Entered properties_changed with changes: #{changes}")
       t = changes.delete("text")
       if t
         html_element.value = t
@@ -27,7 +25,6 @@ class Scarpe
     end
 
     def element
-      @log.debug("Entering element")
       oninput = handler_js_code("change", "this.value")
 
       HTML.render do |h|
