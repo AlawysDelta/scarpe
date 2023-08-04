@@ -1,18 +1,9 @@
-<<<<<<< HEAD
-# frozen_string_literal: true
-=======
->>>>>>> c1fdce9 (merged new commits from original)
 # # frozen_string_literal: true
 
 # require "socket"
 # require "rbconfig"
 
 # class Scarpe
-<<<<<<< HEAD
-#   class AppShutdownError < Scarpe::Error; end
-
-#   module WVRelayUtil # Make sure the including class also includes Scarpe::Log
-=======
 #   # An error occurred which would normally be handled by shutting down the app
 #   class AppShutdownError < Scarpe::Error; end
 
@@ -27,7 +18,6 @@
 #     #
 #     # @param timeout [Float] the longest to wait for more input to read
 #     # @return [Boolean] whether the socket has data ready for reading
->>>>>>> c1fdce9 (merged new commits from original)
 #     def ready_to_read?(timeout = 0.0)
 #       r, _, e = IO.select [@from], [], [@from, @to].uniq, timeout
 
@@ -41,13 +31,10 @@
 #       !r.empty?
 #     end
 
-<<<<<<< HEAD
-=======
 #     # Send bytes on the internal socket to the opposite side.
 #     #
 #     # @param contents [String] data to send
 #     # @return [void]
->>>>>>> c1fdce9 (merged new commits from original)
 #     def send_datagram(contents)
 #       str_data = JSON.dump contents
 #       dgram_str = (str_data.length.to_s + "a" + str_data).encode(Encoding::BINARY)
@@ -66,13 +53,10 @@
 #       nil
 #     end
 
-<<<<<<< HEAD
-=======
 #     # Read data from the internal socket. Read until a whole datagram
 #     # has been received and then return it.
 #     #
 #     # @return [String] the received datagram
->>>>>>> c1fdce9 (merged new commits from original)
 #     def receive_datagram
 #       @readbuf ||= String.new.encode(Encoding::BINARY)
 #       to_read = nil
@@ -110,11 +94,8 @@
 #       raise AppShutdownError, "Got exception #{$!.class} when receiving datagram... #{$!.inspect}"
 #     end
 
-<<<<<<< HEAD
-=======
 #     # Read a datagram from the internal buffer and then dispatch it to the
 #     # appropriate handler.
->>>>>>> c1fdce9 (merged new commits from original)
 #     def respond_to_datagram
 #       message = receive_datagram
 #       m_data = JSON.parse(message)
@@ -144,12 +125,9 @@
 #       end
 #     end
 
-<<<<<<< HEAD
-=======
 #     # Loop for up to `t` seconds, reading data and waiting.
 #     #
 #     # @param t [Float] the number of seconds to loop for
->>>>>>> c1fdce9 (merged new commits from original)
 #     def event_loop_for(t = 1.5)
 #       t_start = Time.now
 #       delay_time = t
@@ -164,16 +142,6 @@
 #     end
 #   end
 
-<<<<<<< HEAD
-#   # This "display service" actually creates a child process and sends events
-#   # back and forth, but creates no widgets of its own.
-#   class WVRelayDisplayService < Scarpe::DisplayService
-#     include Scarpe::Log
-#     include WVRelayUtil # Needs Scarpe::Log
-
-#     attr_accessor :shutdown
-
-=======
 #   # This display service creates a child process and sends events
 #   # back and forth, but creates no widgets of its own. The child
 #   # process will spawn a worker with its own WebviewDisplayService
@@ -189,7 +157,6 @@
 #     attr_accessor :shutdown
 
 #     # Create a Webview Relay Display Service
->>>>>>> c1fdce9 (merged new commits from original)
 #     def initialize
 #       super()
 #       log_init("WV::RelayDisplayService")
@@ -222,10 +189,7 @@
 #       end
 #     end
 
-<<<<<<< HEAD
-=======
 #     # Run, sending and responding to datagrams continuously.
->>>>>>> c1fdce9 (merged new commits from original)
 #     def run_event_loop
 #       until @shutdown
 #         respond_to_datagram while ready_to_read?
@@ -237,20 +201,14 @@
 #       self.destroy
 #     end
 
-<<<<<<< HEAD
-=======
 #     # This method sends a message to the worker process to create a widget. No actual
 #     # widget is created or registered with the display service.
->>>>>>> c1fdce9 (merged new commits from original)
 #     def create_display_widget_for(widget_class_name, widget_id, properties)
 #       send_datagram({ type: :create, class_name: widget_class_name, id: widget_id, properties: })
 #       # Don't need to return anything. It wouldn't be used anyway.
 #     end
 
-<<<<<<< HEAD
-=======
 #     # Tell the worker process to quit, and set a flag telling the event loop to shut down.
->>>>>>> c1fdce9 (merged new commits from original)
 #     def destroy
 #       unless @shutdown
 #         send_datagram({ type: :destroy })

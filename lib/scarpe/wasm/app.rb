@@ -3,18 +3,11 @@
 class Scarpe
   # Scarpe::WASMApp must only be used from the main thread, due to GTK+ limitations.
   class WASMApp < WASMWidget
-<<<<<<< HEAD
-    attr_reader :debug
-=======
->>>>>>> c1fdce9 (merged new commits from original)
     attr_reader :control_interface
 
     attr_writer :shoes_linkable_id
 
     def initialize(properties)
-      # Is this a thing? Do we care about this?
-      # opts = @control_interface.app_opts_get_override(opts)
-
       super
 
       # It's possible to provide a Ruby script by setting
@@ -27,6 +20,7 @@ class Scarpe
       # events, specify overrides and so on.
       @control_interface = ControlInterface.new
       if ENV["SCARPE_TEST_CONTROL"]
+        require "scarpe/unit_test_helpers"
         @control_interface.instance_eval File.read(ENV["SCARPE_TEST_CONTROL"])
       end
 
@@ -34,8 +28,9 @@ class Scarpe
       @view = Scarpe::WebWrangler.new title: @title,
         width: @width,
         height: @height,
-        resizable: @resizable,
-        debug: @debug
+        resizable: @resizable
+
+      @callbacks = {}
 
       # The control interface has to exist to get callbacks like "override Scarpe app opts".
       # But the Scarpe App needs those options to be created. So we can't pass these to
@@ -53,11 +48,11 @@ class Scarpe
       scarpe_app = self
 
       @view.init_code("scarpeInit") do
-        @document_root.request_redraw!
+        request_redraw!
       end
 
       @view.bind("scarpeHandler") do |*args|
-        @document_root.handle_callback(*args)
+        handle_callback(*args)
       end
 
       @view.bind("scarpeExit") do
@@ -84,8 +79,6 @@ class Scarpe
         @view = nil
       end
     end
-<<<<<<< HEAD
-=======
 
     # All JS callbacks to Scarpe widgets are dispatched
     # via this handler
@@ -110,6 +103,5 @@ class Scarpe
       end
       nil
     end
->>>>>>> c1fdce9 (merged new commits from original)
   end
 end

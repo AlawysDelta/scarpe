@@ -16,15 +16,12 @@ class Scarpe
 
     def initialize(properties)
       super
-      @log.debug("Para init")
     end
 
     def properties_changed(changes)
-      @log.debug("Starting properties_Changed")
       items = changes.delete("text_items")
       if items
         html_element.inner_html = to_html
-        @log.debug("re-rendering")
         return
       end
 
@@ -55,7 +52,6 @@ class Scarpe
     end
 
     def to_html
-      @log.debug("to_html")
       @children ||= []
 
       element { child_markup }

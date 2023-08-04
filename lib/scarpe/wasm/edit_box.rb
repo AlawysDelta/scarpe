@@ -2,14 +2,9 @@
 
 class Scarpe
   class WASMEditBox < Scarpe::WASMWidget
-<<<<<<< HEAD
-    include Scarpe::Log
-=======
->>>>>>> c1fdce9 (merged new commits from original)
     attr_reader :text, :height, :width
 
     def initialize(properties)
-      log_init("ScarpeEditBox")
       super
 
       # The JS handler sends a "change" event, which we forward to the Shoes widget tree

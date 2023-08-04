@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# frozen_string_literal: true
-=======
->>>>>>> c1fdce9 (merged new commits from original)
 # #!/usr/bin/env ruby
 # # frozen_string_literal: true
 
@@ -21,14 +17,6 @@
 #   exit(-1)
 # end
 
-<<<<<<< HEAD
-# class WebviewContainedService < Scarpe::DisplayService::Linkable
-#   include Scarpe::Log
-#   include Scarpe::WVRelayUtil # Needs Scarpe::Log
-
-#   attr_reader :log
-
-=======
 # # This is the implementation of a freestanding Scarpe Webview display server,
 # # which connects via sockets and sends events and properties back and forth
 # # with a display-less Shoes app. The interface is designed to allow fork-based
@@ -45,7 +33,6 @@
 #   #
 #   # @param from [Socket] a readable socket to get input from the Shoes process
 #   # @param to [Socket] a writable socket on which to send output to the Shoes process
->>>>>>> c1fdce9 (merged new commits from original)
 #   def initialize(from, to)
 #     super()
 #     log_init("WV::DisplayWorker")

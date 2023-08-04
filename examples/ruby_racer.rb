@@ -1,30 +1,28 @@
 require "benchmark"
 require "stringio"
 
-Shoes.app(title: "Ruby Racer", debug: true) do
+Shoes.app(title: "Ruby Racer") do
   racer1 = nil
   racer2 = nil
 
   flow do
     stack width: 0.45, margin: 5 do
       para "Racer 1", size: :caption
-      racer1 = edit_box(width: "100%", height: 100) do
-        <<~RUBY
-          for i in 1..10
-            a = "1"
-          end
-        RUBY
-      end
+      code1 = <<~RUBY
+        for i in 1..10
+          a = "1"
+        end
+      RUBY
+      racer1 = edit_box(code1, width: "100%", height: 100)
     end
     stack width: 0.45, margin: 5 do
       para "Racer 2", size: :caption
-      racer2 = edit_box(width: "100%", height: 100) do
-        <<~RUBY
-          10.times do
-            a = "1"
-          end
-        RUBY
-      end
+      code2 = <<~RUBY
+        10.times do
+          a = "1"
+        end
+      RUBY
+      racer2 = edit_box(code2, width: "100%", height: 100)
     end
   end
 

@@ -2,6 +2,8 @@
 
 require "test_helper"
 
+# These are a variety of simple apps, and we're just making sure they don't immediately fail.
+
 class TestWebviewScarpe < LoggedScarpeTest
   def test_that_it_has_a_version_number
     refute_nil ::Scarpe::VERSION
@@ -24,7 +26,7 @@ class TestWebviewScarpe < LoggedScarpeTest
   end
 
   def test_app_timeout
-    run_test_scarpe_code(<<-'SCARPE_APP', timeout: 0.1, allow_fail: true)
+    run_test_scarpe_code(<<-'SCARPE_APP', timeout: 0.5, allow_fail: true)
       Shoes.app do
         para "Just waiting for this to time out"
       end
@@ -102,6 +104,15 @@ class TestWebviewScarpe < LoggedScarpeTest
       Shoes.app do
         p = para "Hello"
         p.replace("Goodbye")
+      end
+    SCARPE_APP
+  end
+
+  def test_download
+    run_test_scarpe_code(<<-'SCARPE_APP', exit_immediately: true)
+      Shoes.app do
+        para "Hello"
+        download("https://raw.githubusercontent.com/scarpe-team/scarpe/main/docs/static/avatar.png")
       end
     SCARPE_APP
   end

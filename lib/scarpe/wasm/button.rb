@@ -24,11 +24,6 @@ class Scarpe
 
     def style
       styles = {}
-<<<<<<< HEAD
-
-      styles[:width] = Dimensions.length(@width) if @width
-      styles[:height] = Dimensions.length(@height) if @height
-=======
       styles["background-color"] = @color
       styles["padding-top"] = @padding_top
       styles["padding-bottom"] = @padding_bottom
@@ -36,16 +31,10 @@ class Scarpe
       styles[:width] = Dimensions.length(@width) if @width
       styles[:height] = Dimensions.length(@height) if @height
       styles["font-size"] = @font_size
->>>>>>> c1fdce9 (merged new commits from original)
 
       styles[:top] = Dimensions.length(@top) if @top
       styles[:left] = Dimensions.length(@left) if @left
       styles[:position] = "absolute" if @top || @left
-<<<<<<< HEAD
-
-      styles
-    end
-=======
       styles["font-size"] = Dimensions.length(font_size) if @size
       styles["font-family"] = @font if @font
       styles["color"] = rgb_to_hex(@stroke) if @stroke
@@ -57,6 +46,5 @@ class Scarpe
 
       Dimensions.length(font_size)
     end
->>>>>>> c1fdce9 (merged new commits from original)
   end
 end

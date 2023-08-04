@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 # The ControlInterface is used for testing. It's a way to register interest
-# in important events like redraw, init and shutdown, and to override
-# test-relevant values like the options to Shoes.app(). Note that no part
-# of the Scarpe framework should ever *depend* on ControlInterface. It's
-# for testing, not normal operation. If no ControlInterface were ever
-# created or called, Scarpe apps should run fine with no modifications.
+# in important events like redraw, init and shutdown, and to configure a
+# Shoes app for testing. Note that no part of the Scarpe framework should
+# ever *depend* on ControlInterface. It's for testing, not normal operation.
+# If no ControlInterface were ever created or called, Scarpe apps should run
+# fine with no modifications.
 #
 # And if you depend on this from the framework, I'll add a check-mode that
 # never dispatches any events to any handlers. Do NOT test me on this.
 
 class Scarpe
   class ControlInterface
-    include Scarpe::Log
+    include Shoes::Log
 
     SUBSCRIBE_EVENTS = [:init, :shutdown, :next_redraw, :every_redraw, :next_heartbeat, :every_heartbeat]
     DISPATCH_EVENTS = [:init, :shutdown, :redraw, :heartbeat]
@@ -22,7 +22,7 @@ class Scarpe
 
     # The control interface needs to see major system components to hook into their events
     def initialize
-      log_init("WASM::ControlInterface")
+      log_init("WV::ControlInterface")
 
       @do_shutdown = false
       @event_handlers = {}
@@ -33,7 +33,7 @@ class Scarpe
       "<#ControlInterface>"
     end
 
-    # This should get called once, from Scarpe::App
+    # This should get called once, from Shoes::App
     def set_system_components(app:, doc_root:, wrangler:)
       unless app && wrangler
         @log.error("False app passed to set_system_components!") unless app
@@ -79,23 +79,17 @@ class Scarpe
     # The control interface has overrides for certain settings. If the override has been specified,
     # those settings will be overridden.
 
-    # Override the Shoes app opts like "debug:" and "die_after:" with new ones.
-    def override_app_opts(new_opts)
-      @new_app_opts = new_opts
-    end
-
-    # Called by Scarpe::App to get the override options
-    def app_opts_get_override(opts)
-      @new_app_opts || opts
-    end
-
     # On recognised events, this sets a handler for that event
     def on_event(event, &block)
       unless SUBSCRIBE_EVENTS.include?(event)
         raise "Illegal subscribe to event #{event.inspect}! Valid values are: #{SUBSCRIBE_EVENTS.inspect}"
       end
 
-      @event_handlers[event] << block
+      @unsub_id ||= 0
+      @unsub_id += 1
+
+      @event_handlers[event] << { handler: block, unsub: @unsub_id }
+      @unsub_id
     end
 
     # Send out the specified event
@@ -106,7 +100,10 @@ class Scarpe
         raise "Illegal dispatch of event #{event.inspect}! Valid values are: #{DISPATCH_EVENTS.inspect}"
       end
 
-      return if @do_shutdown
+      if @do_shutdown
+        @log.debug("CTL: Shutting down - not dispatching #{event}!")
+        return
+      end
 
       if event == :redraw
         dumb_dispatch_event(:every_redraw, *args, **keywords)
@@ -142,8 +139,8 @@ class Scarpe
     private
 
     def dumb_dispatch_event(event, *args, **keywords)
-      @event_handlers[event].each do |handler|
-        instance_eval(*args, **keywords, &handler)
+      @event_handlers[event].each do |data|
+        instance_eval(*args, **keywords, &data[:handler])
       end
     end
   end

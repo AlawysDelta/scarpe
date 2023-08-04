@@ -11,50 +11,44 @@ class Scarpe
   DEFAULT_ASSERTION_TIMEOUT = 1.0
 
   class ControlInterface
+    include Scarpe::Test::Helpers
+
     def timed_out?
       @did_time_out
     end
 
     def die_after(time)
       t_start = Time.now
+      @die_after = [t_start, time]
 
       wrangler.periodic_code("scarpeTestTimeout") do |*_args|
-        if (Time.now - t_start).to_f > time
+        t_delta = (Time.now - t_start).to_f
+        if t_delta > time
           @did_time_out = true
-          @log.warn("die_after - timed out after #{time.inspect}")
-          return_results([false, "Timed out!", time])
+          @log.warn("die_after - timed out after #{t_delta.inspect} (threshold: #{time.inspect})")
+          return_results(false, "Timed out!")
           app.destroy
         end
       end
     end
 
-    # This does a final return of results. Don't call it yourself
-    # unless you want any other results that would be returned
-    # to be wiped out.
-    def return_results(result_structs)
-      result_file = ENV["SCARPE_TEST_RESULTS"] || "./scarpe_results.txt"
-
-      # Multiple different sets of results is bad, even if both are passing.
-      if @results_returned && @results_returned != result_structs
-        # Just raising here doesn't reliably fail the test.
-        # See: https://github.com/scarpe-team/scarpe/issues/212
-        @log.error("Writing multi-result failure file to #{result_file.inspect}!")
-
-        bad_result = [false, "Returned two sets of results!", @results_returned, result_structs]
-        File.write(result_file, JSON.pretty_generate(bad_result))
-
-        return
+    # This is returned alongside the actual results automatically
+    def test_metadata
+      data = {}
+      if @die_after
+        t_delta = (Time.now - @die_after[0]).to_f
+        data["die_after"] = {
+          t_start: @die_after[0].to_s,
+          threshold: @die_after[1],
+          passed: t_delta,
+        }
       end
-
-      @log.debug("Writing results file #{result_file.inspect} to disk!")
-      File.write(result_file, JSON.pretty_generate(result_structs))
-
-      @results_returned = result_structs
+      data
     end
 
     # Need to be able to query widgets in test code
 
-    def all_wasm_widgets
+    def all_wv_widgets
       known = [doc_root]
       to_check = [doc_root]
 
@@ -71,8 +65,8 @@ class Scarpe
     # Shoes doesn't name widgets. We aren't guaranteed that the Shoes widgets are even in the same
     # process, since we have the Relay display service for Webview. So mostly we can look by
     # display service class.
-    def find_wasm_widgets(*specifiers)
-      widgets = all_wasm_widgets
+    def find_wv_widgets(*specifiers)
+      widgets = all_wv_widgets
 
       specifiers.each do |spec|
         if spec.is_a?(Class)
@@ -88,13 +82,18 @@ class Scarpe
     # We want an assertions library, but one that runs inside the spawned
     # Webview sub-process.
 
+    # Note that we do *not* extract this assertions library to use elsewhere
+    # because it's very focused on evented assertions that start and stop
+    # over a period of time. Instantaneous procedural asserts don't want to
+    # use this API.
+
     def return_when_assertions_done
       assertions_may_exist
 
       wrangler.periodic_code("scarpeReturnWhenAssertionsDone") do |*_args|
         if @assertions_pending.empty?
           success = @assertions_failed.empty?
-          return_results [success, assertion_data_as_a_struct]
+          return_results success, "Assertions #{success ? "succeeded" : "failed"}", assertion_data_as_a_struct
           app.destroy
         end
       end

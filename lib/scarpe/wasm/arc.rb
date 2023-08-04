@@ -1,13 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "shape_helper"
-
 class Scarpe
   class WASMArc < Scarpe::WASMWidget
-<<<<<<< HEAD
-    include ShapeHelper
-=======
->>>>>>> c1fdce9 (merged new commits from original)
     def initialize(properties)
       super(properties)
     end

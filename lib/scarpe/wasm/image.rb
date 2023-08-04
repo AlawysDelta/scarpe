@@ -4,10 +4,7 @@ require "scarpe/base64"
 
 class Scarpe
   class WASMImage < WASMWidget
-<<<<<<< HEAD
-=======
     include Base64
->>>>>>> c1fdce9 (merged new commits from original)
     def initialize(properties)
       super
 

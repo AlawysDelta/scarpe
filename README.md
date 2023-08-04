@@ -11,6 +11,12 @@
 
 Scarpe isn't feature complete with any version of Shoes (yet?). We're initially targeting Shoes Classic.
 
+## Wait, What's A Shoes?
+
+Shoes is an old library (really several different ones) that let you build little local desktop computer programs, package them up and give copies to people. Imagine if you can write a tiny little Ruby program (e.g. sneak a peek at the next section) and then it would make a runnable app, opening a window in Ruby, where you could click buttons and play sounds and stuff.
+
+Scarpe is a rewrite of Shoes, because old Shoes doesn't really work any more. There have been a surprising number of rewrites of Shoes over the years -- people love it and miss having it around. This one is ours. Also it uses Webview.
+
 ## Usage
 
 Note: you'll probably want the [Scarpe in Development](#scarpe-in-development) instructions below in most cases! Scarpe isn't ready for "just install the released version" production usage yet.
@@ -44,12 +50,22 @@ Scarpe requires [Ruby 3.2](https://www.ruby-lang.org/en/downloads/) or higher! u
 This is where most of the action is happening right now, and to have the full Scarpe experience _today_ this is probably what you want to do.
 
 ```
+# dependencies - Mac version
+brew install portaudio pkg-config # for sound!
+# dependencies - Ubuntu Linux version
+sudo apt install libgtk-3-dev libwebkit2gtk-4.0-dev libportaudio2
+
+for any other linux or windows. please see the webview docs for your [platform](https://github.com/webview/webview#prerequisites)
+
 # get it
 git clone http://github.com/scarpe-team/scarpe
 cd scarpe; bundle install
+
 # run it
 ./exe/scarpe examples/button.rb --dev
 ```
+
+If you are using Visual Studio Code, you can use this [extension](https://github.com/gintama91/Scarpe-Vscode-Extension). This extension simplifies the process of executing commands by eliminating the need to repeatedly type lengthy file paths, resulting in a more efficient and productive development experience.
 
 ### Finer details
 
@@ -63,9 +79,15 @@ Most commonly we are all using this command: `./exe/scarpe examples/button.rb --
 
 The `--dev` flag points to your local scarpe rather than an installed Scarpe gem.
 
+The `--debug` flag will dump a ton of useful information to the console if you want to see what's happening with your app.
+
 It's very early in the development process. If you'd like to help develop Scarpe, great! It would be useful to drop us a message/issue/PR on GitHub early on, so we know you're working in a particular area, and we can warn you if anybody else is currently doing so.
 
 We'd love the help!
+
+If you want to quickly add a feature, you can use the `ruby scarpegen.rb` command. This command will generate the necessary files for you, along with a simple template and a set of questions to guide you through the process. By following these steps, you will be good to go!
+
+By leveraging the `ruby scarpegen.rb` command and the provided resources, you can expedite the feature addition process and ensure a smoother development experience.
 
 ## Are we done yet?
 
@@ -104,6 +126,8 @@ Example usage:
 `SCARPE_DISPLAY_SERVICE=glibui ./exe/scarpe examples/hello_world.rb`
 
 The SCARPE_TEST_CONTROL environment variable can contain a path to a test-control-interface script for the Webview display service. If you look at test_helper, it gives some examples of how to use it.
+
+If you run ./exe/scarpe env, you can see all current environment settings.
 
 ## More info
 

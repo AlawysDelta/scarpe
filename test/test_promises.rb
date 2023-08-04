@@ -7,15 +7,15 @@ class TestPromises < Minitest::Test
 
   def setup
     # Save so we can restore it post-test
-    # @normal_log_config = Scarpe::Logger.current_log_config
+    @normal_log_config = Shoes::Log.current_log_config
 
     # For these tests, don't log anything
-    # Scarpe::Logger.configure_logger("default" => "fatal")
+    Shoes::Log.configure_logger("default" => "fatal")
   end
 
   def teardown
     # Restore previous log config
-    # Scarpe::Logger.configure_logger(@normal_log_config)
+    Shoes::Log.configure_logger(@normal_log_config)
   end
 
   def empty_promise_with_checker(state: nil, parents: [])
@@ -45,6 +45,24 @@ class TestPromises < Minitest::Test
     assert_equal true, called[:fulfilled], "Promise fulfilled handler wasn't called successfully on simple fulfillment!"
     assert_equal false, called[:rejected], "Promise rejection handler was called on simple fulfillment!"
     assert_equal true, called[:scheduled], "Promise scheduled handler wasn't called on simple fulfillment!"
+  end
+
+  def test_simple_promise_fulfillment_accessor
+    p = Promise.new
+
+    p.fulfilled!
+
+    assert_equal true, p.fulfilled?, "Promise fulfilled? accessor failed!"
+    assert_equal false, p.rejected?, "Promise rejected? accessor failed!"
+  end
+
+  def test_simple_promise_rejection_accessor
+    p = Promise.new
+
+    p.rejected!
+
+    assert_equal false, p.fulfilled?, "Promise fulfilled? accessor failed!"
+    assert_equal true, p.rejected?, "Promise rejected? accessor failed!"
   end
 
   def test_simple_promise_rejection

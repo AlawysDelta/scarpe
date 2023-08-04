@@ -9,11 +9,11 @@ class TestWebviewImage < ScarpeWebviewTest
       "shoes_linkable_id" => 1,
       "url" => @url,
     }
-    Scarpe::DisplayService.full_reset!
+    Shoes::DisplayService.full_reset!
   end
 
   def teardown
-    Scarpe::DisplayService.full_reset!
+    Shoes::DisplayService.full_reset!
   end
 
   def test_renders_image
@@ -65,7 +65,7 @@ class TestWebviewImage < ScarpeWebviewTest
   def test_image_size
     url = "http://shoesrb.com/manual/static/shoes-icon.png"
     expected_size = [128, 128]
-    img = Scarpe::Image.new(url)
+    img = Shoes::Image.new(url)
     actual_size = img.size
 
     assert_equal expected_size, actual_size

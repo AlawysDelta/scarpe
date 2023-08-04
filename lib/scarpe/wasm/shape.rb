@@ -1,28 +1,12 @@
 # frozen_string_literal: true
 
-<<<<<<< HEAD
-require_relative "shape_helper"
-
-class Scarpe
-  class WASMShape < Scarpe::WASMWidget
-    include ShapeHelper
-
-=======
 class Scarpe
   # Should inherit from Slot?
   class WASMShape < Scarpe::WASMWidget
->>>>>>> c1fdce9 (merged new commits from original)
     def initialize(properties)
       super(properties)
     end
 
-<<<<<<< HEAD
-    def element(&block)
-      HTML.render do |h|
-        h.div(id: html_id, style: style) do
-          h.svg(width: "400", height: "500") do
-            h.path(d: shape_path, style: "stroke:#{stroke_color};stroke-width:2")
-=======
     def to_html
       @children ||= []
       child_markup = @children.map(&:to_html).join
@@ -46,7 +30,6 @@ class Scarpe
         h.div(id: html_id, style: style) do
           h.svg(width: "400", height: "500") do
             h.path(d: path_from_shape_commands, style: "fill:#{color};stroke-width:2;")
->>>>>>> c1fdce9 (merged new commits from original)
           end
           block.call(h) if block_given?
         end
@@ -55,8 +38,6 @@ class Scarpe
 
     private
 
-<<<<<<< HEAD
-=======
     # We have a set of Shoes shape commands, but we need SVG objects like paths.
     def path_from_shape_commands
       current_path = ""
@@ -77,19 +58,11 @@ class Scarpe
       current_path
     end
 
->>>>>>> c1fdce9 (merged new commits from original)
     def style
       {
         width: "400",
         height: "900",
       }
     end
-<<<<<<< HEAD
-
-    def stroke_color
-      "black"
-    end
-=======
->>>>>>> c1fdce9 (merged new commits from original)
   end
 end
