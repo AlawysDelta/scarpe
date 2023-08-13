@@ -19,14 +19,14 @@ module Shoes
       resizable: true,
       &app_code_body
     )
+      log_init("Shoes::App")
+
       if Shoes::App.instance
         @log.error("Trying to create a second Shoes::App in the same process! Fail!")
         raise "Cannot create multiple Shoes::App objects!"
       else
         Shoes::App.instance = self
       end
-
-      log_init("Shoes::App")
 
       @do_shutdown = false
 
@@ -63,13 +63,13 @@ module Shoes
       @watch_for_destroy = bind_shoes_event(event_name: "destroy") do
         Shoes::DisplayService.unsub_from_events(@watch_for_destroy) if @watch_for_destroy
         @watch_for_destroy = nil
-        # self.destroy(send_event: false)
+        self.destroy(send_event: false)
       end
 
       Signal.trap("INT") do
-        @log.warning("App interrupted by signal, stopping...")
+        @log.warn("App interrupted by signal, stopping...")
         puts "\nStopping Shoes app..."
-        #destroy
+        destroy
       end
     end
 
@@ -131,7 +131,7 @@ module Shoes
       to_add = @document_root.children
       until to_add.empty?
         out.concat(to_add)
-        to_add = to_add.flat_map(&:children).compact
+        to_add = to_add.flat_map { |w| w.respond_to?(:children) ? w.children : [] }.compact
       end
 
       out
@@ -144,7 +144,7 @@ module Shoes
       specs.each do |spec|
         if spec.is_a?(Class)
           widgets.select! { |w| spec === w }
-        elsif spec.is_a?(Symbol)
+        elsif spec.is_a?(Symbol) || spec.is_a?(String)
           s = spec.to_s
           case s[0]
           when "$"
@@ -156,7 +156,7 @@ module Shoes
               raise "Error getting global variable: #{spec.inspect}"
             end
           when "@"
-            if app.instance_variables.include?(spec)
+            if Shoes::App.instance.instance_variables.include?(spec.to_sym)
               widgets &= [self.instance_variable_get(spec)]
             else
               raise "Can't find top-level instance variable: #{spec.inspect}!"

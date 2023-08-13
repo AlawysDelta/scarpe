@@ -72,6 +72,9 @@ module Shoes
       end
     end
 
+    # Shoes uses a "hidden" style property for hide/show
+    display_property :hidden
+
     def initialize(*args, **kwargs)
       log_init("Widget")
 
@@ -90,6 +93,8 @@ module Shoes
         "@children=#{@children.inspect} properties=#{display_property_values.inspect}>"
     end
 
+    private
+
     def bind_self_event(event_name, &block)
       raise("Widget has no linkable_id! #{inspect}") unless linkable_id
 
@@ -99,6 +104,8 @@ module Shoes
     def bind_no_target_event(event_name, &block)
       bind_shoes_event(event_name:, &block)
     end
+
+    public
 
     def display_property_values
       all_property_names = self.class.display_property_names
@@ -111,6 +118,8 @@ module Shoes
       properties
     end
 
+    private
+
     def create_display_widget
       klass_name = self.class.name.delete_prefix("Scarpe::").delete_prefix("Shoes::")
 
@@ -118,8 +127,9 @@ module Shoes
       ::Shoes::DisplayService.display_service.create_display_widget_for(klass_name, self.linkable_id, display_property_values)
     end
 
+    public
+
     attr_reader :parent
-    attr_reader :children
 
     def set_parent(new_parent)
       @parent&.remove_child(self)
@@ -128,28 +138,27 @@ module Shoes
       send_shoes_event(new_parent.linkable_id, event_name: "parent", target: linkable_id)
     end
 
-    # Do not call directly, use set_parent
-    def remove_child(child)
-      @children ||= []
-      unless @children.include?(child)
-        @log.warn("remove_child: no such child(#{child.inspect}) for parent(#{parent.inspect})!")
-      end
-      @children.delete(child)
-    end
-
-    # Do not call directly, use set_parent
-    def add_child(child)
-      @children ||= []
-      @children << child
-    end
-
     # Removes the element from the Shoes::Widget tree
     def destroy
       @parent&.remove_child(self)
       send_shoes_event(event_name: "destroy", target: linkable_id)
     end
+    alias_method :remove, :destroy
 
-    alias_method :destroy_self, :destroy
+    # Hide the widget.
+    def hide
+      self.hidden = true
+    end
+
+    # Show the widget.
+    def show
+      self.hidden = false
+    end
+
+    # Hide the widget if it is currently shown. Show it if it is currently hidden.
+    def toggle
+      self.hidden = !self.hidden
+    end
 
     # We use method_missing for widget-creating methods like "button",
     # and also to auto-create display-property getters and setters.

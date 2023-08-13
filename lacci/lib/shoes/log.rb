@@ -5,7 +5,7 @@ require "json"
 require "js"
 
 module Shoes
-  LOG_LEVELS = [:debug, :info, :warning, :error, :fatal].freeze
+  LOG_LEVELS = [:debug, :info, :warn, :error, :fatal].freeze
 
   # Include this module to get a @log instance variable to log as your
   # configured component.
@@ -84,7 +84,7 @@ module Shoes
           #   :debug
           # when "info"
           #   :info
-          # when "warn", "warning"
+          # when "warn"
           #   :warn
           # when "err", "error"
           #   :error
@@ -185,10 +185,6 @@ module Shoes
       # send(method, ...)
     end
   end
-  # end
-
-  # class Logging::Logger
-  # alias_method :warning, :warn
   # end
 
   # log_config = if ENV["SCARPE_LOG_CONFIG"]
